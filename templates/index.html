@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div>index page</div>
+  <form id="item-search-form">
+    <input type="text" id="search" class="form-control" placeholder="Search For Item">
+
+    <button class="btn btn-primary btn-block btn-sm">Search</button>
+  </form>
+
+  <div id='select-block'>
+    
+  </div>
+  <button id='test-button' onclick="addItem('Bag of holding', 'uncommon', 'requires_attunement', 'bag-of-holding', 'this item holds a lot of stuff. like all of the stuff', 'Wondrous item')">test</button>
+
+  <form action="" method="POST"></form>
+  <button class="btn btn-primary" id="button-${item.slug}">ignore me</button>
+{% endblock %}
