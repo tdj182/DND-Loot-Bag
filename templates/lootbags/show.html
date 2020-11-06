@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="display-4">{{lootbag.name}}</div>
+
+  <div>Add Item</div>
+  <form id="item-search-form">
+    <input type="text" id="search" class="form-control" placeholder="Search For Item">
+
+    <button class="btn btn-primary btn-block btn-sm">Search</button>
+  </form>
+
+  <div id='select-block'>
+    
+  </div>
+
+  <ul class="list-group" id="item-list">
+    {% for item in lootbag.items %}
+    <li class="list-group-item lootbag-item">
+      <a href="">{{item.item_name}}</a>
+      <form method="POST" action="/item/{{item.id}}/delete" class="form-inline">
+        <button class="btn fas fa-trash ml-2"></button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+
+{% endblock %}

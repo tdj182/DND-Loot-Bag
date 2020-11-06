@@ -1,17 +1,35 @@
 {% extends 'base.html' %}
 {% block content %}
-  <div>index page</div>
-  <form id="item-search-form">
-    <input type="text" id="search" class="form-control" placeholder="Search For Item">
+  <div class="display-2">My Loot Bags</div>
 
-    <button class="btn btn-primary btn-block btn-sm">Search</button>
+  <br/>
+
+  <a data-toggle="collapse" href="#lootbag-form" role="button" aria-expanded="false" aria-controls="lootbag-form" class="card-link btn btn-success">New Loot Bag</a>
+  <form action="/add-lootbag" method="POST"  class="collapse" id="lootbag-form">
+    {{ form.hidden_tag() }}
+
+    {% for field in form if field.widget.input_type != 'hidden' %}
+      {% for error in field.errors %}
+        <span class="text-danger">{{ error }}</span>
+      {% endfor %}
+      {{ field(placeholder=field.label.text, class="form-control") }}
+    {% endfor %}
+
+    <button class="btn btn-primary btn-lg btn-block">Create!</button>
   </form>
 
-  <div id='select-block'>
+  <br/>
+  <br/>
+
+  <ul class="list-group" id="lootbag-list">
+    {% for lootbag in lootbags %}
+    <li class="list-group-item lootbag-item">
+      <a href="/lootbag/{{lootbag.id}}">{{lootbag.name}}</a>
+      <form method="POST" action="/lootbag/{{lootbag.id}}/delete" class="form-inline">
+        <button class="btn fas fa-trash ml-2"></button>
+      </form>
+    </li>
     
-  </div>
-
-
-  <form action="" method="POST"></form>
-  <button class="btn btn-primary" id="button-${item.slug}">ignore me</button>
+    {% endfor %}
+  </ul>
 {% endblock %}

@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, request, session, g, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
-from forms import SearchForm, AddUserForm
+from forms import SearchForm, UserForm, LootbagForm
 from models import db, connect_db, User, Lootbag, Item, LootbagItem
 from flask_cors import CORS, cross_origin
 import os
@@ -56,7 +56,7 @@ def do_logout():
 def signup():
     """Show Signup Form or sign up user"""
 
-    form = AddUserForm()
+    form = UserForm()
     if form.validate_on_submit():
         try:
             user = User.signup(
@@ -75,6 +75,101 @@ def signup():
     return render_template("users/signup.html", form=form)
 
 
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    """Handle user login."""
+
+    form = UserForm()
+
+    if form.validate_on_submit():
+        user = User.authenticate(form.username.data,
+                                 form.password.data)
+
+        if user:
+            do_login(user)
+            flash(f"Hello, {user.username}!", "success")
+            return redirect("/")
+
+        flash("Invalid credentials.", 'danger')
+
+    return render_template('users/login.html', form=form)
+
+
+@app.route('/logout')
+def logout():
+    """logout of user."""
+
+    do_logout()
+    flash(f"See you next time", "success")
+    return redirect("/")
+
+
+#################################################################
+# Users
+
+@app.route('/delete', methods=["POST"])
+def delete_user():
+    """Delete user."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    do_logout()
+
+    flash(f"{g.user} has been deleted")
+    db.session.delete(g.user)
+    db.session.commit()
+
+    return redirect("/signup")
+
+#################################################################
+# lootbags
+
+
+@app.route('/lootbag/<int:lootbag_id>')
+def lootbag_show(lootbag_id):
+    """Show a lootbag."""
+
+    lootbag = Lootbag.query.get_or_404(lootbag_id)
+    return render_template('lootbags/show.html', lootbag=lootbag)
+
+
+@app.route('/add-lootbag', methods=['POST'])
+def add_lootbag():
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+
+    form = LootbagForm()
+
+    if form.validate_on_submit():
+        new_bag = Lootbag(name=form.name.data, password=form.password.data)
+        g.user.lootbags.append(new_bag)
+        db.session.commit()
+
+    return redirect('/')
+
+
+@app.route("/lootbag/<int:lootbag_id>/delete", methods=["POST"])
+def lootbag_delete(lootbag_id):
+    """Delete lootbag."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    bag = Lootbag.query.get(lootbag_id)
+    db.session.delete(bag)
+    db.session.commit()
+
+    return redirect("/")
+
+
+#################################################################
+#  items
+
+
 @app.route("/add-item", methods=['POST'])
 def add_item():
     """Add a new item to the database"""
@@ -88,6 +183,23 @@ def add_item():
     return f"<h1>{item_name}, {slug}</h1><div>{rarity}, {requires_attunement}</div>{text}, <small>{type}</small>"
 
 
+@app.route("/item/<int:item_id>/delete", methods=["POST"])
+def item_delete(item_id):
+    """Delete item."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    item = Item.query.get(item_id)
+    lootbag = item.lootbag[0]
+
+    db.session.delete(item)
+    db.session.commit()
+
+    return redirect(f"/lootbag/{lootbag.id}")
+
+
 @app.route('/')
 def homepage():
     """Show homepage:
@@ -98,8 +210,11 @@ def homepage():
 
     if g.user:
         # Get all ids of users that the logged in user follows
-
-        return render_template('index.html')
+        lootbags = (Lootbag
+                    .query
+                    .filter(Lootbag.owner_id == g.user.id).all())
+        form = LootbagForm()
+        return render_template('home.html', lootbags=lootbags, form=form)
 
     else:
         return render_template('home-anon.html')

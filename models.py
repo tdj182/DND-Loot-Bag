@@ -27,7 +27,8 @@ class User(db.Model):
         nullable=False,
     )
 
-    lootbags = db.relationship("Lootbag")
+    lootbags = db.relationship(
+        "Lootbag", cascade="all,delete", backref="user")
 
     @classmethod
     def signup(cls, username, password):
@@ -124,7 +125,7 @@ class Lootbag(db.Model):
     )
 
     items = db.relationship(
-        'Item', secondary="lootbags_items", backref="lootbags")
+        'Item', secondary="lootbags_items", cascade="all,delete", backref="lootbag")
 
 
 class LootbagItem(db.Model):

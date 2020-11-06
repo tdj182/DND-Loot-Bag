@@ -8,9 +8,9 @@ db.drop_all()
 db.create_all()
 
 # Add users
-ty = User(username='tyJ', password='password')
-mike = User(username='mikeF', password='mikemike')
-kade = User(username='kadeF', password='kadekade')
+ty = User.signup(username='tyJ', password='password')
+mike = User.signup(username='mikeF', password='mikemike')
+kade = User.signup(username='kadeF', password='kadekade')
 
 db.session.add_all([ty, mike, kade])
 db.session.commit()

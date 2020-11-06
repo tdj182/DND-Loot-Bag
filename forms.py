@@ -9,8 +9,14 @@ class SearchForm(FlaskForm):
     search = StringField('Search Item', validators=[Required()])
 
 
-class AddUserForm(FlaskForm):
+class UserForm(FlaskForm):
     """Form for adding users"""
 
     username = username = StringField('Username', validators=[Required()])
     password = PasswordField('Password', validators=[Length(min=6)])
+
+
+class LootbagForm(FlaskForm):
+    """Form for a new loot bag"""
+    name = name = StringField('Name', validators=[Required()])
+    password = PasswordField('Password')

@@ -2,3 +2,12 @@
 .highlighted {
   font-size: larger;
 }
+
+.lootbag-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.fa-trash {
+  color: red;
+}
