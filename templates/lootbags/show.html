@@ -1,17 +1,51 @@
 {% extends 'base.html' %}
 {% block content %}
-  <div class="display-4">{{lootbag.name}}</div>
+  <div class="display-4 title" id="{{lootbag.id}}">{{lootbag.name}}<span></span></div>
 
-  <div>Add Item</div>
+  <ul>
+    <li>Platinum: {{lootbag.platinum}}</li>
+    <li>Gold: {{lootbag.gold}}</li>
+    <li>Electrum: {{lootbag.electrum}}</li>
+    <li>Silver: {{lootbag.silver}}</li>
+    <li>Copper: {{lootbag.copper}}</li>
+  </ul>
+  <div class="display-4">Items</div>
+
+  
+  <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#create-item-form" aria-expanded="false" aria-controls="create-item-form">
+    Create Item
+  </button>
+
+  
+  <form method="POST" id="create-item-form" class="collapse" action="/lootbag/{{lootbag.id}}/add-item">
+    {{ form.hidden_tag() }}
+
+    {% for field in form if field.widget.input_type != 'hidden' %}
+      {% for error in field.errors %}
+        <span class="text-danger">{{ error }}</span>
+      {% endfor %}
+      {{ field(placeholder=field.label.text, class="form-control") }}
+    {% endfor %}
+
+    <button class="btn btn-primary btn-sm btn-block">Create</button>
+  </form>
+
+  <div>OR</div>
+
   <form id="item-search-form">
-    <input type="text" id="search" class="form-control" placeholder="Search For Item">
+    <input type="text" id="search" class="form-control" placeholder="Search For Item To Add">
 
     <button class="btn btn-primary btn-block btn-sm">Search</button>
   </form>
 
+  
+
+
+
   <div id='select-block'>
     
   </div>
+
 
   <ul class="list-group" id="item-list">
     {% for item in lootbag.items %}

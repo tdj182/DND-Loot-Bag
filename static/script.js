@@ -1,6 +1,7 @@
 $( document ).ready(function() {
   const BASE_URL = "https://api.open5e.com/";
   let selectGroup;
+  const currLootbag = $('.title').attr('id');
 
   async function processForm(evt) {
     evt.preventDefault()
@@ -27,16 +28,6 @@ $( document ).ready(function() {
     }
   }
 
-  // async function addItem(itemObj) {
-  //   console.log(typeof itemObj)
-  //   console.log(typeof itemObj)
-
-  //   const res = await axios.post("http://127.0.0.1:5000/add-item", form = {
-  //     Name: 'Fred',
-  //     Age: '23'
-  //   })
-  //   console.log(res.data)
-  // }
 
   // Add the HTML to select which item to add
   function buildHtml(item) {
@@ -46,14 +37,14 @@ $( document ).ready(function() {
         <h5 class="card-title">${item.name}</h5>
         <h6 class="card-subtitle mb-2">Rarity: ${item.rarity} ${item.requires_attunement}</h6>
         <h6 class="card-subtitle mb-2">Type: ${item.type}</h6>
-        <form id="form-${item.slug}" action="/add-item method="POST">
-          <input hidden type="text" name="name" value="${item.name}">
+        <form id="form-${item.slug}" action="/lootbag/${currLootbag}/add-item" method="POST">
+          <input hidden type="text" name="item_name" value="${item.name}">
           <input hidden type="text" name="rarity" value="${item.rarity}">
           <input hidden type="text" name="requires_attunement" value="${item.requires_attunement}">
           <input hidden type="text" name="slug" value="${item.slug}">
           <input hidden type="text" name="text" value="${item.text}">
           <input hidden type="text" name="type" value="${item.type}">
-          <button type="submit" class="btn btn-primary" id="button-${item.slug}" formmethod="post" formaction="/add-item">Add Item</button>
+          <button type="submit" class="btn btn-primary" id="button-${item.slug}" formmethod="post" formaction="/lootbag/${currLootbag}/add-item">Add Item</button>
         </form>
 
         <a data-toggle="collapse" href="#${item.slug}" role="button" aria-expanded="false" aria-controls="${item.slug}" class="card-link">Read More</a>
@@ -65,8 +56,7 @@ $( document ).ready(function() {
     `)
     // Prevent the page from refreshing
     $( `#form-${item.slug}`).submit(function( event ) {
-      alert(`Handler for ${item.slug} called` );
-      event.preventDefault();
+
     });
   }
 

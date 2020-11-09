@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, request, session, g, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
-from forms import SearchForm, UserForm, LootbagForm
+from forms import SearchForm, UserForm, LootbagForm, ItemForm
 from models import db, connect_db, User, Lootbag, Item, LootbagItem
 from flask_cors import CORS, cross_origin
 import os
@@ -10,6 +10,7 @@ app = Flask(__name__)
 CORS(app)
 
 CURR_USER_KEY = "curr_user"
+CURR_LOOTBAG_ID = -1
 
 # Get DB_URI from environ variable (useful for production/testing) or,
 # if not set there, use development local db.
@@ -132,7 +133,12 @@ def lootbag_show(lootbag_id):
     """Show a lootbag."""
 
     lootbag = Lootbag.query.get_or_404(lootbag_id)
-    return render_template('lootbags/show.html', lootbag=lootbag)
+    form = ItemForm()
+    if g.user.id != lootbag.owner_id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    return render_template('lootbags/show.html', lootbag=lootbag, form=form)
 
 
 @app.route('/add-lootbag', methods=['POST'])
@@ -170,15 +176,35 @@ def lootbag_delete(lootbag_id):
 #  items
 
 
-@app.route("/add-item", methods=['POST'])
-def add_item():
+@app.route("/lootbag/<int:lootbag_id>/add-item", methods=['POST'])
+def add_item(lootbag_id):
     """Add a new item to the database"""
-    item_name = request.form.get('name')
+
+    lootbag = Lootbag.query.get(lootbag_id)
+    item_name = request.form.get('item_name')
     rarity = request.form.get('rarity')
     requires_attunement = request.form.get('requires_attunement')
     slug = request.form.get('slug')
     text = request.form.get('text')
     type = request.form.get('type')
+
+    new_item = Item(
+        item_name=item_name,
+        rarity=rarity,
+        text=text,
+        requires_attunement=requires_attunement,
+        slug=slug,
+        type=type
+    )
+    db.session.add(new_item)
+    db.session.commit()
+
+    new_lootbag_item = LootbagItem(
+        lootbag_id=lootbag_id,
+        item_id=new_item.id
+    )
+    db.session.add(new_lootbag_item)
+    db.session.commit()
 
     return f"<h1>{item_name}, {slug}</h1><div>{rarity}, {requires_attunement}</div>{text}, <small>{type}</small>"
 

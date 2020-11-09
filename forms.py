@@ -12,11 +12,20 @@ class SearchForm(FlaskForm):
 class UserForm(FlaskForm):
     """Form for adding users"""
 
-    username = username = StringField('Username', validators=[Required()])
+    username = StringField('Username', validators=[Required()])
     password = PasswordField('Password', validators=[Length(min=6)])
 
 
 class LootbagForm(FlaskForm):
     """Form for a new loot bag"""
-    name = name = StringField('Name', validators=[Required()])
+    name = StringField('Name', validators=[Required()])
     password = PasswordField('Password')
+
+
+class ItemForm(FlaskForm):
+    """Form for custom Item"""
+    item_name = StringField('Name')
+    rarity = StringField('Rarity')
+    requires_attunement = StringField('Requires Attunement')
+    text = StringField('Text')
+    type = StringField('Type')
