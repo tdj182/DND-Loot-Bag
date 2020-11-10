@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, request, session, g, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
-from forms import SearchForm, UserForm, LootbagForm, ItemForm
+from forms import SearchForm, UserForm, LootbagForm, ItemForm, LootbagLoginForm
 from models import db, connect_db, User, Lootbag, Item, LootbagItem
 from flask_cors import CORS, cross_origin
 import os
@@ -128,17 +128,69 @@ def delete_user():
 # lootbags
 
 
-@app.route('/lootbag/<int:lootbag_id>')
+@app.route('/lootbag/<int:lootbag_id>', methods=["GET", "POST"])
 def lootbag_show(lootbag_id):
     """Show a lootbag."""
 
     lootbag = Lootbag.query.get_or_404(lootbag_id)
     form = ItemForm()
+    if g.user.id == lootbag.owner_id:
+        return render_template('lootbags/show.html', lootbag=lootbag, form=form)
+    elif not lootbag.is_shareable:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    login_form = LootbagLoginForm()
+
+    if login_form.validate_on_submit():
+        if login_form.password.data == lootbag.password:
+            return render_template('lootbags/show.html', lootbag=lootbag, form=form)
+
+        flash("Access unauthorized.", "danger")
+        return redirect('/')
+
+    return render_template('lootbags/login_lootbag.html', lootbag=lootbag, form=login_form)
+
+
+@app.route('/lootbag/<int:lootbag_id>/edit', methods=["GET", "POST"])
+def lootbag_edit(lootbag_id):
+    """Edit a lootbag."""
+
+    lootbag = Lootbag.query.get_or_404(lootbag_id)
+    form = LootbagForm(obj=lootbag)
     if g.user.id != lootbag.owner_id:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    return render_template('lootbags/show.html', lootbag=lootbag, form=form)
+    if form.validate_on_submit():
+        lootbag.name = form.name.data
+        lootbag.password = form.password.data
+        lootbag.is_shareable = form.is_shareable.data
+        db.session.commit()
+        return redirect('/')
+
+    return render_template('lootbags/edit.html', lootbag=lootbag, form=form)
+
+
+@app.route('/lootbag/<int:lootbag_id>/convert', methods=["POST"])
+def lootbag_convert(lootbag_id):
+    """Convert currency in lootbag."""
+
+    lootbag = Lootbag.query.get(lootbag_id)
+    platinum = int(request.form.get('platinum'))
+    gold = int(request.form.get('gold'))
+    electrum = int(request.form.get('electrum'))
+    silver = int(request.form.get('silver'))
+    copper = int(request.form.get('copper'))
+
+    lootbag.platinum = lootbag.platinum + platinum
+    lootbag.gold = lootbag.gold + gold
+    lootbag.electrum = lootbag.electrum + electrum
+    lootbag.silver = lootbag.silver + silver
+    lootbag.copper = lootbag.copper + copper
+
+    db.session.commit()
+    return ('', 204)
 
 
 @app.route('/add-lootbag', methods=['POST'])
@@ -206,7 +258,7 @@ def add_item(lootbag_id):
     db.session.add(new_lootbag_item)
     db.session.commit()
 
-    return f"<h1>{item_name}, {slug}</h1><div>{rarity}, {requires_attunement}</div>{text}, <small>{type}</small>"
+    return ('', 204)
 
 
 @app.route("/item/<int:item_id>/delete", methods=["POST"])

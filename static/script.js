@@ -1,6 +1,7 @@
 $( document ).ready(function() {
   const BASE_URL = "https://api.open5e.com/";
   let selectGroup;
+  let baseCopper = 0;
   const currLootbag = $('.title').attr('id');
 
   async function processForm(evt) {
@@ -24,13 +25,43 @@ $( document ).ready(function() {
     console.log(data.results)
     selectGroup = data.results
     for (const item in selectGroup) {
-      buildHtml(selectGroup[item])
+      buildItemSelectHtml(selectGroup[item])
     }
   }
 
+  // Convert Currency
+  function convertCurrency() {
+    baseCopper =
+      parseInt($("#platinum-history").text().split(": ").pop()) * 1000 +
+      parseInt($("#gold-history").text().split(": ").pop()) * 100 +
+      parseInt($("#electrum-history").text().split(": ").pop()) * 50 +
+      parseInt($("#silver-history").text().split(": ").pop()) * 10 +
+      parseInt($("#copper-history").text().split(": ").pop());
+
+    updateConvertedCurrencyHtml()
+    console.log(baseCopper);
+  }
+
+  function updateConvertedCurrencyHtml() {
+    $("#platinum-converted").html(`Platinum: ${Math.floor(
+      baseCopper / 1000
+    )} <i class="fas fa-coins platinum-coin"></i>`)
+    $("#gold-converted").html(`gold: ${Math.floor(
+      baseCopper / 100
+    )} <i class="fas fa-coins gold-coin"></i>`)
+    $("#electrum-converted").html(`electrum: ${Math.floor(
+      baseCopper / 50
+    )} <i class="fas fa-coins electrum-coin"></i>`)
+    $("#silver-converted").html(`silver: ${Math.floor(
+      baseCopper / 10
+    )} <i class="fas fa-coins silver-coin"></i>`)
+    $("#copper-converted").html(`copper: ${Math.floor(
+      baseCopper
+    )} <i class="fas fa-coins copper-coin"></i>`)
+  }
 
   // Add the HTML to select which item to add
-  function buildHtml(item) {
+  function buildItemSelectHtml(item) {
     $('#select-block').append(`
     <div class="card">
       <div class="card-body">
@@ -64,16 +95,5 @@ $( document ).ready(function() {
 
   $("#item-search-form").on("submit", processForm);
 
-  // $("#select-block").on('click', 'button',  function(event){
-    
-  //   addItem($(this).data())
-  // })
-  // $("#test-button").on('click', {
-  //   "itemName": itemName,
-  //   "rarity": rarity,
-  //   "requires_attunement": requires_attunement,
-  //   "slug": slug, 
-  //   "text": text,
-  //   "type": type
-  // }, addItem)
+  convertCurrency()
 });

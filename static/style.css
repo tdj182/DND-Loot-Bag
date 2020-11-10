@@ -1,6 +1,14 @@
+li {
+  list-style: none;
+}
 
 form {
   margin: 10px 0px;
+  max-width: 300px;
+}
+
+form > button {
+  margin-top: 5px;
 }
 
 .highlighted {
@@ -10,8 +18,33 @@ form {
 .lootbag-item {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.edit-delete-lootbag {
+  display: flex;
 }
 
 .fa-trash {
   color: red;
+}
+
+.fa-edit {
+  color: blue
+}
+
+.outline {
+  border: red solid 1px
+}
+
+#currency-area {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-around;
+}
+
+#currency-area > form {
+  
 }

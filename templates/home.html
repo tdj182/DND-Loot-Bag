@@ -12,10 +12,11 @@
       {% for error in field.errors %}
         <span class="text-danger">{{ error }}</span>
       {% endfor %}
+      {{field.label}}
       {{ field(placeholder=field.label.text, class="form-control") }}
     {% endfor %}
 
-    <button class="btn btn-primary btn-lg btn-block">Create!</button>
+    <button class="btn btn-primary btn-sm btn-block">Create!</button>
   </form>
 
   <br/>
@@ -25,9 +26,15 @@
     {% for lootbag in lootbags %}
     <li class="list-group-item lootbag-item">
       <a href="/lootbag/{{lootbag.id}}">{{lootbag.name}}</a>
-      <form method="POST" action="/lootbag/{{lootbag.id}}/delete" class="form-inline">
-        <button class="btn fas fa-trash ml-2"></button>
-      </form>
+
+      <div class="edit-delete-lootbag">
+        <form method="GET" action="/lootbag/{{lootbag.id}}/edit" class="form-inline">
+          <button class="btn fas fa-edit ml-2"></button>
+        </form>
+        <form method="POST" action="/lootbag/{{lootbag.id}}/delete" class="form-inline">
+          <button class="btn fas fa-trash ml-2"></button>
+        </form>
+      </div>
     </li>
     
     {% endfor %}

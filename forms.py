@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField
+from wtforms import StringField, PasswordField, TextAreaField, BooleanField
 from wtforms.validators import Required, Email, Length
 
 
@@ -20,6 +20,7 @@ class LootbagForm(FlaskForm):
     """Form for a new loot bag"""
     name = StringField('Name', validators=[Required()])
     password = PasswordField('Password')
+    is_shareable = BooleanField('Is Shareable?',  validators=[Required()])
 
 
 class ItemForm(FlaskForm):
@@ -29,3 +30,9 @@ class ItemForm(FlaskForm):
     requires_attunement = StringField('Requires Attunement')
     text = StringField('Text')
     type = StringField('Type')
+
+
+class LootbagLoginForm(FlaskForm):
+    """Form for adding users"""
+
+    password = PasswordField('Password')

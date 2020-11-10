@@ -2,13 +2,38 @@
 {% block content %}
   <div class="display-4 title" id="{{lootbag.id}}">{{lootbag.name}}<span></span></div>
 
-  <ul>
-    <li>Platinum: {{lootbag.platinum}}</li>
-    <li>Gold: {{lootbag.gold}}</li>
-    <li>Electrum: {{lootbag.electrum}}</li>
-    <li>Silver: {{lootbag.silver}}</li>
-    <li>Copper: {{lootbag.copper}}</li>
-  </ul>
+  <div id="currency-area" class="">
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-secondary">History Amount</li>
+      <li id="platinum-history" class="list-group-item">Platinum: {{lootbag.platinum}}</li>
+      <li id="gold-history" class="list-group-item">Gold: {{lootbag.gold}}</li>
+      <li id="electrum-history" class="list-group-item">Electrum: {{lootbag.electrum}}</li>
+      <li id="silver-history" class="list-group-item">Silver: {{lootbag.silver}}</li>
+      <li id="copper-history" class="list-group-item">Copper: {{lootbag.copper}}</li>
+    </ul>
+    
+    <form action="/lootbag/{{lootbag.id}}/convert" method="POST">
+    <ul class="list-group">
+      <button class="btn list-group-item-primary list-group-item">convert</button>
+      <input  class="list-group-item" name="platinum" type="number" required value=0>
+      <input class=" list-group-item" name="gold" type="number" required value=0>
+      <input class="list-group-item"" name="electrum" type="number" required value=0>
+      <input class="list-group-item"" name="silver" type="number" required value=0>
+      <input class="list-group-item"" name="copper" type="number" required value=0>
+     </ul>
+    </form>
+
+    <ul id="converted-currency" class="list-group">
+      <li class="list-group-item list-group-item-secondary">Converted Amount</li>
+
+      <li id="platinum-converted" class="list-group-item">Platinum:</li>
+      <li id="gold-converted" class="list-group-item">Gold:</li>
+      <li id="electrum-converted" class="list-group-item">Electrum:</li>
+      <li id="silver-converted" class="list-group-item">Silver:</li>
+      <li id="copper-converted" class="list-group-item">Copper:</li>
+    </ul>
+
+  </div>
   <div class="display-4">Items</div>
 
   

@@ -88,6 +88,8 @@ class Lootbag(db.Model):
         nullable=False,
     )
 
+    is_shareable = db.Column(db.Boolean, nullable=False, default=False)
+
     platinum = db.Column(
         db.Integer,
         nullable=False,

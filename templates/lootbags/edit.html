@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="display-2">My Loot Bags</div>
+
+  <form method="POST" id="lootbag-form">
+    {{ form.hidden_tag() }}
+
+    {% for field in form if field.widget.input_type != 'hidden' %}
+      {% for error in field.errors %}
+        <span class="text-danger">{{ error }}</span>
+      {% endfor %}
+      {{field.label}}
+      {{ field(placeholder=field.label.text, class="form-control text-left") }}
+    {% endfor %}
+
+    <div class="edit-btn-area">
+      <button class="btn btn-success">Edit!</button>
+      <a href="/" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+  </form>
+
+{% endblock %}
+
+
