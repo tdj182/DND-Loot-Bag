@@ -74,13 +74,39 @@
 
   <ul class="list-group" id="item-list">
     {% for item in lootbag.items %}
-    <li class="list-group-item lootbag-item">
-      <a href="">{{item.item_name}}</a>
-      <form method="POST" action="/item/{{item.id}}/delete" class="form-inline">
-        <button class="btn fas fa-trash ml-2"></button>
-      </form>
-    </li>
+    <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">
+          {{item.item_name}}
+          <small><i>{{item.requires_attunement}}</i></small>
+        </h5>
+        <h6 class="card-subtitle mb-2 text-muted">Rarity: {{item.rarity}}</h6>
+
+        <a data-toggle="collapse" href="#details-{{item.id}}" role="button" aria-expanded="false" aria-controls="details-{{item.id}}}" class="card-link">Read Text</a>
+
+        <div class="collapse" id="details-{{item.id}}">
+          <div class="card card-body">{{item.text}}.</div>
+        </div>
+
+        <a href="#" class="card-link">Another link</a>
+      </div>
+    </div>
     {% endfor %}
   </ul>
 
+
+
 {% endblock %}
+
+
+    <!-- <li class="list-group-item lootbag-item">
+      <a href="">{{item.item_name}}</a>
+      <div class="edit-delete-lootbag">
+        <form method="GET" action="/lootbag/{{lootbag.id}}/edit" class="form-inline">
+          <button class="btn fas fa-edit ml-2"></button>
+        </form>
+        <form method="POST" action="/item/{{item.id}}/delete" class="form-inline">
+          <button class="btn fas fa-trash ml-2"></button>
+        </form>
+      </div>
+    </li> -->

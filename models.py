@@ -189,6 +189,11 @@ class Item(db.Model):
         db.Text
     )
 
+    quantity = db.Column(
+        db.Integer,
+        default=1
+    )
+
 
 def connect_db(app):
     """Connect this database to provided Flask app.
