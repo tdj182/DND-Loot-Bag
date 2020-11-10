@@ -26,9 +26,9 @@ db.session.commit()
 
 # Create some items
 item1 = Item(item_name='sword', rarity='common', text='1d6 slashing damage',
-             requires_attunement='', slug='sword', type='Martial Weapon,Melee Weapon')
+             slug='sword', type='Martial Weapon,Melee Weapon')
 item2 = Item(item_name='Gloves of Spider Climb', rarity='uncommon', text='With these gloves, you can climb stuff',
-             requires_attunement='requires attunement', slug='Gloves-of-Spider-Climb', type='Wondrous Item')
+             requires_attunement=True, slug='Gloves-of-Spider-Climb', type='Wondrous Item')
 
 db.session.add_all([item1, item2])
 db.session.commit()

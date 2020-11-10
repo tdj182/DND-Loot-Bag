@@ -38,13 +38,26 @@ form > button {
   border: red solid 1px
 }
 
+#select-block, #item-list{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
 #currency-area {
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  justify-content: space-around;
+  justify-content: left;
 }
 
-#currency-area > form {
-  
+#currency-area > #convert-currency-form {
+  width: 120px
 }
+
+#currency-area > #currency-converted, #currency-history{
+  margin-top: 10px
+}
+

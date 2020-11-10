@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, request, session, g, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, DataError
 
 from forms import SearchForm, UserForm, LootbagForm, ItemForm, LootbagLoginForm
 from models import db, connect_db, User, Lootbag, Item, LootbagItem
@@ -10,7 +10,10 @@ app = Flask(__name__)
 CORS(app)
 
 CURR_USER_KEY = "curr_user"
-CURR_LOOTBAG_ID = -1
+# Will allow a user to stay logged into one lootbag that is not theirs if they have the password
+EXTRA_LOOTBAG_PASSWORD = "extra_password"
+EXTRA_LOOTBAG_ID = "extra_loot_id"
+
 
 # Get DB_URI from environ variable (useful for production/testing) or,
 # if not set there, use development local db.
@@ -39,6 +42,9 @@ def add_user_to_g():
     else:
         g.user = None
 
+    if EXTRA_LOOTBAG_PASSWORD not in session:
+        add_session_lootbag("", -1)
+
 
 def do_login(user):
     """Log in user."""
@@ -51,6 +57,11 @@ def do_logout():
 
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
+
+
+def add_session_lootbag(password, id):
+    session[EXTRA_LOOTBAG_PASSWORD] = password
+    session[EXTRA_LOOTBAG_ID] = id
 
 
 @app.route('/signup', methods=["GET", "POST"])
@@ -134,7 +145,7 @@ def lootbag_show(lootbag_id):
 
     lootbag = Lootbag.query.get_or_404(lootbag_id)
     form = ItemForm()
-    if g.user.id == lootbag.owner_id:
+    if g.user.id == lootbag.owner_id or lootbag.password == session[EXTRA_LOOTBAG_PASSWORD] and lootbag.id == session[EXTRA_LOOTBAG_ID]:
         return render_template('lootbags/show.html', lootbag=lootbag, form=form)
     elif not lootbag.is_shareable:
         flash("Access unauthorized.", "danger")
@@ -144,6 +155,7 @@ def lootbag_show(lootbag_id):
 
     if login_form.validate_on_submit():
         if login_form.password.data == lootbag.password:
+            add_session_lootbag(login_form.password.data, lootbag.id)
             return render_template('lootbags/show.html', lootbag=lootbag, form=form)
 
         flash("Access unauthorized.", "danger")
@@ -189,6 +201,7 @@ def lootbag_convert(lootbag_id):
     lootbag.silver = lootbag.silver + silver
     lootbag.copper = lootbag.copper + copper
 
+    db.session.add(lootbag)
     db.session.commit()
     return ('', 204)
 
@@ -239,6 +252,12 @@ def add_item(lootbag_id):
     slug = request.form.get('slug')
     text = request.form.get('text')
     type = request.form.get('type')
+    quantity = request.form.get('quantity')
+
+    if requires_attunement == 'requires attunement':
+        requires_attunement = True
+    else:
+        requires_attunement = False
 
     new_item = Item(
         item_name=item_name,
@@ -246,7 +265,8 @@ def add_item(lootbag_id):
         text=text,
         requires_attunement=requires_attunement,
         slug=slug,
-        type=type
+        type=type,
+        quantity=quantity
     )
     db.session.add(new_item)
     db.session.commit()
@@ -259,6 +279,33 @@ def add_item(lootbag_id):
     db.session.commit()
 
     return ('', 204)
+
+
+@app.route('/lootbag/<int:lootbag_id>/<int:item_id>/edit', methods=["GET", "POST"])
+def item_edit(lootbag_id, item_id):
+    """Edit a lootbag."""
+
+    lootbag = Lootbag.query.get_or_404(lootbag_id)
+    item = Item.query.get_or_404(item_id)
+    form = ItemForm(obj=item)
+    if g.user.id == lootbag.owner_id:
+        pass
+    elif lootbag.password != session[EXTRA_LOOTBAG_PASSWORD] or lootbag.id != session[EXTRA_LOOTBAG_ID]:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    if form.validate_on_submit():
+        item.item_name = form.item_name.data,
+        item.rarity = form.rarity.data,
+        item.text = form.text.data,
+        item.requires_attunement = form.requires_attunement.data,
+        item.type = form.type.data,
+        item.quantity = form.quantity.data
+
+        db.session.commit()
+        return redirect(f'/lootbag/{lootbag.id}')
+
+    return render_template('/items/edit.html', item=item, form=form)
 
 
 @app.route("/item/<int:item_id>/delete", methods=["POST"])

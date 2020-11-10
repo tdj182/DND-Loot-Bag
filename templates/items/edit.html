@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="display-2">{{item.item_name}}</div>
+
+  <form method="POST" id="lootbag-form">
+    {{ form.hidden_tag() }}
+
+    {% for field in form if field.widget.input_type != 'hidden' %}
+      {% for error in field.errors %}
+        <span class="text-danger">{{ error }}</span>
+      {% endfor %}
+      {% if field.label.text == 'Requires Attunement' %}
+      {{field.label}}
+      {% endif %}
+      
+      {% if field.type == 'IntegerField' %}
+      {{ field(placeholder=field.label.text, type="number", class="form-control") }}
+      {% else %}
+      {{ field(placeholder=field.label.text, class="form-control") }}
+      {% endif %}
+    {% endfor %}
+
+    <div class="edit-btn-area">
+      <button class="btn btn-success">Edit!</button>
+      <a href="/" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+  </form>
+
+{% endblock %}
