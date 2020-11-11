@@ -25,13 +25,14 @@ class LootbagForm(FlaskForm):
 
 class ItemForm(FlaskForm):
     """Form for custom Item"""
-    item_name = StringField('Name')
+    item_name = StringField('Name', validators=[
+                            Required()])
     rarity = StringField('Rarity')
     requires_attunement = BooleanField('Requires Attunement')
     text = StringField('Text')
     type = StringField('Type')
     quantity = IntegerField('Quantity', validators=[
-                            Required()])
+        Required()])
 
 
 class LootbagLoginForm(FlaskForm):

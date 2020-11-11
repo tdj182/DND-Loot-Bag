@@ -29,6 +29,20 @@ $( document ).ready(function() {
 
   $("#item-search-form").on("submit", processForm);
   $('#btn-convert').on("click", beginCurrencyAdjustment);
+  
+  $('#select-block').on('click', ".btn-add-item", function() {
+    selectedItem = $(this).siblings("[name=slug]")
+    for (const item in selectGroup) {
+      if (selectGroup[item].slug == selectedItem[0].defaultValue){
+        addItemHtml(selectGroup[item])
+      }
+    }
+  })
+  
+  $('#item-list').on('click', '.fa-trash', function() {
+    $(this).parents("[class=card]").remove()
+  })
+
   // set value to 0 on focus
   $('input[type=number]').on('focusin', function() {
     this.value = '0';

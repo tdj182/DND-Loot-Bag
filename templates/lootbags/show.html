@@ -54,7 +54,7 @@
       {% endif %}
 
       {% if field.type == 'IntegerField' %}
-      {{ field(placeholder=field.label.text, type="number", class="form-control") }}
+      {{ field(placeholder=field.label.text, type="number", value=1, class="form-control") }}
       {% else %}
       {{ field(placeholder=field.label.text, class="form-control") }}
       {% endif %}
@@ -91,14 +91,14 @@
           <small><i>Requires Attunement</i></small>
           {% endif %}
         </h5>
-        <h6 class="card-subtitle mb-2 text-muted">Rarity: {{item.rarity}}</h6>
+        <h6 class="card-subtitle mb-2">Rarity: {{item.rarity}}</h6>
         <h6 class="card-subtitle mb-2">Type: {{item.type}}</h6>
 
         <div class="edit-delete-lootbag">
           <form>
             <a data-toggle="collapse" href="#details-{{item.id}}" role="button" aria-expanded="false" aria-controls="details-{{item.id}}}" class="card-link btn fas fa-info-circle  text-primary">Details</a>
           </form>
-          <form action="/lootbag/{{lootbag.id}}/{{item.id}}/edit">
+          <form action="/item/{{item.id}}/edit">
             <button href="#" class="card-link text-info btn fas fa-edit mt-0">Edit</button>
           </form>
           <form action="/item/{{item.id}}/delete", method="POST">

@@ -179,7 +179,8 @@ class Item(db.Model):
 
     requires_attunement = db.Column(
         db.Boolean,
-        default=False
+        default=False,
+        server_default="false"
     )
 
     slug = db.Column(

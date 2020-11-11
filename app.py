@@ -281,12 +281,13 @@ def add_item(lootbag_id):
     return ('', 204)
 
 
-@app.route('/lootbag/<int:lootbag_id>/<int:item_id>/edit', methods=["GET", "POST"])
-def item_edit(lootbag_id, item_id):
+@app.route('/item/<int:item_id>/edit', methods=["GET", "POST"])
+def item_edit(item_id):
     """Edit a lootbag."""
 
-    lootbag = Lootbag.query.get_or_404(lootbag_id)
     item = Item.query.get_or_404(item_id)
+    lootbag = Lootbag.query.get_or_404(item.lootbag[0].id)
+
     form = ItemForm(obj=item)
     if g.user.id == lootbag.owner_id:
         pass
@@ -295,10 +296,14 @@ def item_edit(lootbag_id, item_id):
         return redirect("/")
 
     if form.validate_on_submit():
+        if form.requires_attunement.data == True:
+            item.requires_attunement = True
+        else:
+            item.requires_attunement = False
+
         item.item_name = form.item_name.data,
         item.rarity = form.rarity.data,
         item.text = form.text.data,
-        item.requires_attunement = form.requires_attunement.data,
         item.type = form.type.data,
         item.quantity = form.quantity.data
 
@@ -322,7 +327,7 @@ def item_delete(item_id):
     db.session.delete(item)
     db.session.commit()
 
-    return redirect(f"/lootbag/{lootbag.id}")
+    return ('', 204)
 
 
 @app.route('/')
