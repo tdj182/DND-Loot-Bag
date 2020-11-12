@@ -18,32 +18,39 @@
 </head>
 
 <body>
-<nav class="navbar navbar-expand">
-  {% if not g.user %}
-  <a class="navbar-brand" href="/">Home</a>
-  <a href="/login">Log in</a>
-  {% else %}
-  <a class="navbar-brand" href="/">{{g.user.username}}</a>
-  <a href="/logout">Log out</a>
+  <nav class="navbar navbar-expand">
+    <div class="logo">
+      <a href="/">
+        <span class="text-primary">
+          <i class="fab fa-d-and-d"></i>
+        </span>
+      </a>
+    </div>
+    {% if not g.user %}
+    <a class="navbar-brand" href="/">Home</a>
+    <a href="/login">Log in</a>
+    {% else %}
+    <a class="navbar-brand" href="/">{{g.user.username}}</a>
+    <a href="/logout">Log out</a>
+    
+    <form method="POST" action="/delete" class="form-inline">
+      <button class="btn btn-outline-danger ml-2">Delete Profile</button>
+    </form>
+    {% endif %}
+  </nav>
+  <div class="container">
+    {% for category, message in get_flashed_messages(with_categories=True) %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
 
-  <form method="POST" action="/delete" class="form-inline">
-    <button class="btn btn-outline-danger ml-2">Delete Profile</button>
-  </form>
-  {% endif %}
-</nav>
-<div class="container">
-  {% for category, message in get_flashed_messages(with_categories=True) %}
-  <div class="alert alert-{{ category }}">{{ message }}</div>
-  {% endfor %}
+    {% block content %}
+    {% endblock %}
 
-  {% block content %}
-  {% endblock %}
-
-</div>
-<script src="https://unpkg.com/axios/dist/axios.js"></script>
-<script src="https://unpkg.com/jquery"></script>
-<script src="/static/items.js"></script>
-<script src="/static/currency.js"></script>
-<script src="/static/script.js"></script>
+  </div>
+  <script src="https://unpkg.com/axios/dist/axios.js"></script>
+  <script src="https://unpkg.com/jquery"></script>
+  <script src="/static/items.js"></script>
+  <script src="/static/currency.js"></script>
+  <script src="/static/script.js"></script>
 </body>
 </html>
