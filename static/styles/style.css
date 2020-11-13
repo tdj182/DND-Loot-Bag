@@ -1,0 +1,142 @@
+:root {
+  --primary-color: red;
+  --secondary-color: black;
+}
+
+
+body {
+  font-family: "Avantgarde", "TeX Gyre Adventor", "URW Gothic L", "sans-serif";
+  background: url("/static/treasure\ room.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+hr {
+  border: none;
+  height: 2px;
+  /* Set the hr color */
+  background-color: white; /* Modern Browsers */
+}
+
+nav {
+  background-color: var(--secondary-color);
+  border-bottom: solid red 1px;
+}
+
+nav a {
+  color: var(--primary-color)
+}
+
+nav a:hover {
+  color: white
+}
+
+nav .container {
+  padding-bottom: 0px;
+}
+
+
+.display-4{
+  color: red;
+  background-color: rgba(0, 0, 0);
+}
+
+.container {
+  background-color: rgba(0, 0, 0, 0.5);
+  text-align: center;
+  color: white;
+  padding: 0px 0px 20px 0px;
+}
+
+.card, .jumbotron {
+  background-color: rgba(0, 0, 0, 0.8);
+  margin: 1rem;
+  color: #fff;
+  display: grid;
+}
+
+.jumbotron {
+  display: inline-block;
+}
+
+
+.text-primary {
+  color: var(--primary-color)
+}
+
+.fa-d-and-d {
+  color: var(--primary-color);
+  font-size: larger;
+}
+
+.center-align {
+  text-align: center;
+}
+
+.centered-form{
+  width: 300px;
+  margin: 0 auto;
+}
+
+
+#btn-new-lootbag{
+  background-color: black;
+  color: white;
+  border: red 1px solid;
+}
+
+
+
+/* Recent changes above */
+li {
+  list-style: none;
+}
+
+form {
+  margin: 10px 0px;
+  max-width: 300px;
+  text-align: center;
+}
+
+form > button {
+  margin-top: 5px;
+}
+
+.highlighted {
+  font-size: larger;
+}
+
+.lootbag-item {
+  margin: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: var(--secondary-color);
+  border: var(--primary-color) 1px solid;
+  border-top-width: 1px !important; 
+}
+
+.edit-delete {
+  display: flex;
+}
+
+.edit-delete form {
+  margin: 0px;
+}
+
+.fa-trash {
+  color: red;
+}
+
+.fa-edit {
+  color: blue
+}
+
+.outline {
+  border: red solid 1px
+}
+
+

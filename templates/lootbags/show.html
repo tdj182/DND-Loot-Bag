@@ -1,83 +1,94 @@
 {% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/styles/lootbag.css">
+{% endblock %}
+
 {% block content %}
-  <div class="display-4 title" id="{{lootbag.id}}">{{lootbag.name}}<span></span></div>
-
-  <div id="currency-area" class="">
-    <ul hidden id="currency-history" class="list-group">
-      <li class="list-group-item list-group-item-secondary">History Amount</li>
-      <li id="platinum-history" class="list-group-item">Platinum: {{lootbag.platinum}}</li>
-      <li id="gold-history" class="list-group-item">Gold: {{lootbag.gold}}</li>
-      <li id="electrum-history" class="list-group-item">Electrum: {{lootbag.electrum}}</li>
-      <li id="silver-history" class="list-group-item">Silver: {{lootbag.silver}}</li>
-      <li id="copper-history" class="list-group-item">Copper: {{lootbag.copper}}</li>
-    </ul>
-    
-    <form id="convert-currency-form" action="/lootbag/{{lootbag.id}}/convert" method="POST">
-      <ul class="list-group">
-        <button id='btn-convert' class="btn list-group-item-primary list-group-item">convert</button>
-        <input  class="list-group-item" name="platinum" type="number" required value=0>
-        <input class=" list-group-item" name="gold" type="number" required value=0>
-        <input class="list-group-item"" name="electrum" type="number" required value=0>
-        <input class="list-group-item"" name="silver" type="number" required value=0>
-        <input class="list-group-item"" name="copper" type="number" required value=0>
-      </ul>
-    </form>
-
-    <ul id="currency-converted" class="list-group">
-      <li class="list-group-item list-group-item-secondary">Converted Amount</li>
-
-      <li id="platinum-converted" class="list-group-item">Platinum:</li>
-      <li id="gold-converted" class="list-group-item">Gold:</li>
-      <li id="electrum-converted" class="list-group-item">Electrum:</li>
-      <li id="silver-converted" class="list-group-item">Silver:</li>
-      <li id="copper-converted" class="list-group-item">Copper:</li>
-    </ul>
-
+  <div class="title" id="{{lootbag.id}}">
+    <div class="display-4">{{lootbag.name}}</div>
+    <p>Owner: {{lootbag.user.username}}</p>
   </div>
-  <div class="display-4">Items</div>
 
-  
-  <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#create-item-form" aria-expanded="false" aria-controls="create-item-form">
-    Create Item
-  </button>
-
-  
-  <form method="POST" id="create-item-form" class="collapse" action="/lootbag/{{lootbag.id}}/add-item">
-    {{ form.hidden_tag() }}
-
-    {% for field in form if field.widget.input_type != 'hidden' %}
-      {% for error in field.errors %}
-        <span class="text-danger">{{ error }}</span>
-      {% endfor %}
-      {% if field.label.text == 'Requires Attunement' %}
-      {{field.label}}
-      {% endif %}
-
-      {% if field.type == 'IntegerField' %}
-      {{ field(placeholder=field.label.text, type="number", value=1, class="form-control") }}
-      {% else %}
-      {{ field(placeholder=field.label.text, class="form-control") }}
-      {% endif %}
-    {% endfor %}
-
-    <button class="btn btn-primary btn-sm btn-block">Create</button>
-  </form>
-
-  <div>OR</div>
-
-  <form id="item-search-form">
-    <input type="text" id="search" class="form-control" placeholder="Search For Item To Add">
-
-    <button class="btn btn-primary btn-block btn-sm">Search</button>
-  </form>
-
-  
-
-
-
-  <div id='select-block'>
+  <div id="lootbag-adjustments-area">
+    <div>
+      <div class="display-4">Currency</div>
+      <div id="currency-area" class="">
+        <ul hidden id="currency-history" class="list-group">
+          <li class="list-group-item list-group-item-secondary">History Amount</li>
+          <li id="platinum-history" class="list-group-item">Platinum: {{lootbag.platinum}}</li>
+          <li id="gold-history" class="list-group-item">Gold: {{lootbag.gold}}</li>
+          <li id="electrum-history" class="list-group-item">Electrum: {{lootbag.electrum}}</li>
+          <li id="silver-history" class="list-group-item">Silver: {{lootbag.silver}}</li>
+          <li id="copper-history" class="list-group-item">Copper: {{lootbag.copper}}</li>
+        </ul>
+        
+        <form id="convert-currency-form" action="/lootbag/{{lootbag.id}}/convert" method="POST">
+          <ul class="list-group">
+            <button id='btn-convert' class="btn list-group-item-primary list-group-item">Convert</button>
+            <input  class="list-group-item" name="platinum" type="number" required value=0>
+            <input class=" list-group-item" name="gold" type="number" required value=0>
+            <input class="list-group-item"" name="electrum" type="number" required value=0>
+            <input class="list-group-item"" name="silver" type="number" required value=0>
+            <input class="list-group-item"" name="copper" type="number" required value=0>
+          </ul>
+        </form>
     
+        <ul id="currency-converted" class="list-group">
+          <li class="list-group-item list-group-item-secondary">Converted Amount</li>
+    
+          <li id="platinum-converted" class=".platinum-coin list-group-item">Platinum:</li>
+          <li id="gold-converted" class=".gold-coin list-group-item">Gold:</li>
+          <li id="electrum-converted" class=".electrum-coin list-group-item">Electrum:</li>
+          <li id="silver-converted" class=".silver-coin list-group-item">Silver:</li>
+          <li id="copper-converted" class=".copper-coin list-group-item">Copper:</li>
+        </ul>
+    
+      </div>
+    </div>
+
+
+    <div>
+      <div class="display-4">Items</div>
+      <button class="btn" id="btn-create-item" type="button" data-toggle="collapse" data-target="#create-item-form" aria-expanded="false" aria-controls="create-item-form">
+        Create Item
+      </button>
+      <form method="POST" id="create-item-form" class="collapse centered-form" action="/lootbag/{{lootbag.id}}/add-item">
+        {{ form.hidden_tag() }}
+    
+        {% for field in form if field.widget.input_type != 'hidden' %}
+          {% for error in field.errors %}
+            <span class="text-danger">{{ error }}</span>
+          {% endfor %}
+          {% if field.label.text == 'Requires Attunement' %}
+          {{field.label}}
+          {% endif %}
+    
+          {% if field.type == 'IntegerField' %}
+          {{ field(placeholder=field.label.text, type="number", value=1, class="form-control") }}
+          {% else %}
+          {{ field(placeholder=field.label.text, class="form-control") }}
+          {% endif %}
+        {% endfor %}
+    
+        <button class="btn btn-primary btn-sm btn-block">Create</button>
+      </form>
+
+      <div><i>OR</i></div>
+      
+      <form id="item-search-form" class="centered-form">
+        <input type="text" id="search" class="form-control" placeholder="Search For Item To Add">
+        <button class="btn btn-primary btn-block btn-sm">Search</button>
+      </form>
+    </div>
   </div>
+  
+
+  
+
+
+
+  <div id='select-block'></div>
 
   <hr>
 
@@ -94,7 +105,7 @@
         <h6 class="card-subtitle mb-2">Rarity: {{item.rarity}}</h6>
         <h6 class="card-subtitle mb-2">Type: {{item.type}}</h6>
 
-        <div class="edit-delete-lootbag">
+        <div class="edit-delete">
           <form>
             <a data-toggle="collapse" href="#details-{{item.id}}" role="button" aria-expanded="false" aria-controls="details-{{item.id}}}" class="card-link btn fas fa-info-circle  text-primary">Details</a>
           </form>

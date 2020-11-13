@@ -1,0 +1,68 @@
+
+.platinum-coin {
+  color: #e5e4e1;
+}
+
+.gold-coin {
+  color: gold;
+}
+
+.electrum-coin {
+  color: #b99033;
+}
+
+.silver-coin {
+  color: silver;
+}
+
+.copper-coin {
+  color: #b87333;
+}
+
+.card-body, .collapse > .card-body {
+  border: red 1px solid;
+}
+
+#btn-convert {
+  background-color: #007bff;
+  color: white;
+}
+
+#btn-create-item {
+  margin-top: 10px;
+  width: 100%;
+  background-color: black;
+  color: white;
+  border: red 1px solid;
+}
+
+#lootbag-adjustments-area {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+#select-block, #item-list{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: start;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+#currency-area {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: center;
+  color: black
+}
+
+#currency-area > #convert-currency-form {
+  width: 120px
+}
+
+#currency-area > #currency-converted, #currency-history{
+  margin-top: 10px
+}

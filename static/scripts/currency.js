@@ -69,16 +69,16 @@ function updateConvertedCurrencyHtml() {
   $("#platinum-converted").html(`Platinum: ${Math.floor(
     baseCopper / 1000
   )} <i class="fas fa-coins platinum-coin"></i>`)
-  $("#gold-converted").html(`gold: ${Math.floor(
+  $("#gold-converted").html(`Gold: ${Math.floor(
     baseCopper / 100
   )} <i class="fas fa-coins gold-coin"></i>`)
-  $("#electrum-converted").html(`electrum: ${Math.floor(
+  $("#electrum-converted").html(`Electrum: ${Math.floor(
     baseCopper / 50
   )} <i class="fas fa-coins electrum-coin"></i>`)
-  $("#silver-converted").html(`silver: ${Math.floor(
+  $("#silver-converted").html(`Silver: ${Math.floor(
     baseCopper / 10
   )} <i class="fas fa-coins silver-coin"></i>`)
-  $("#copper-converted").html(`copper: ${Math.floor(
+  $("#copper-converted").html(`Copper: ${Math.floor(
     baseCopper
   )} <i class="fas fa-coins copper-coin"></i>`)
 }

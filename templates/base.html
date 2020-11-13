@@ -5,6 +5,9 @@
   <meta charset="UTF-8">
   <title>Loot Bag</title>
 
+  
+  {% block head %}
+  {% endblock %}
   <link rel="stylesheet"
         href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
         
@@ -14,29 +17,38 @@
 
   <link rel="stylesheet"
         href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
-  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/styles/style.css">
 </head>
 
 <body>
   <nav class="navbar navbar-expand">
-    <div class="logo">
-      <a href="/">
-        <span class="text-primary">
-          <i class="fab fa-d-and-d"></i>
-        </span>
-      </a>
+    <div class="container">
+      <div class="logo">
+        <a href="/">
+          <span class="text-primary navbar-brand">
+            <i class="fab fa-d-and-d"></i>
+          </span>
+        </a>
+      </div>
+      <ul class="navbar-nav">
+        {% if not g.user %}
+        <li class="nav-item">
+          <a class="nav-link" href="/login">Log in</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/signup">Signup</a>
+        </li>
+
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="/">{{g.user.username}}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Log out</a>
+        </li>
+        {% endif %}
+      </ul>
     </div>
-    {% if not g.user %}
-    <a class="navbar-brand" href="/">Home</a>
-    <a href="/login">Log in</a>
-    {% else %}
-    <a class="navbar-brand" href="/">{{g.user.username}}</a>
-    <a href="/logout">Log out</a>
-    
-    <form method="POST" action="/delete" class="form-inline">
-      <button class="btn btn-outline-danger ml-2">Delete Profile</button>
-    </form>
-    {% endif %}
   </nav>
   <div class="container">
     {% for category, message in get_flashed_messages(with_categories=True) %}
@@ -49,8 +61,8 @@
   </div>
   <script src="https://unpkg.com/axios/dist/axios.js"></script>
   <script src="https://unpkg.com/jquery"></script>
-  <script src="/static/items.js"></script>
-  <script src="/static/currency.js"></script>
-  <script src="/static/script.js"></script>
+  <script src="/static/scripts/items.js"></script>
+  <script src="/static/scripts/currency.js"></script>
+  <script src="/static/scripts/script.js"></script>
 </body>
 </html>
