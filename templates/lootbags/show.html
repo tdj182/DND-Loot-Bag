@@ -7,7 +7,13 @@
 {% block content %}
   <div class="title" id="{{lootbag.id}}">
     <div class="display-4">{{lootbag.name}}</div>
-    <p>Owner: {{lootbag.user.username}}</p>
+    <p>Owner: {{lootbag.user.username}}
+      {% if lootbag.user.id != session['curr_user'] %}
+      lootbag
+      <br> Note: You can only be logged into one loot bag at a time that is not yours
+      {% endif %}
+    </p>
+
   </div>
 
   <div id="lootbag-adjustments-area">
@@ -71,7 +77,7 @@
           {% endif %}
         {% endfor %}
     
-        <button class="btn btn-primary btn-sm btn-block">Create</button>
+        <button id="btn-confirm-create-item" class="btn btn-primary btn-sm btn-block">Create</button>
       </form>
 
       <div><i>OR</i></div>
@@ -112,8 +118,8 @@
           <form action="/item/{{item.id}}/edit">
             <button href="#" class="card-link text-info btn fas fa-edit mt-0">Edit</button>
           </form>
-          <form action="/item/{{item.id}}/delete", method="POST">
-            <button class="card-link btn fas fa-trash text-danger mt-0">Delete</button>
+          <form action="/item/{{item.id}}/delete" method="POST">
+            <button class="card-link btn fas fa-trash text-danger mt-0" type='submit'>Delete</button>
           </form>   
         </div>
         

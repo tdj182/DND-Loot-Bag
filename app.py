@@ -99,7 +99,7 @@ def login():
 
         if user:
             do_login(user)
-            flash(f"Hello, {user.username}!", "success")
+            flash(f"Hello, {user.username}!", "secondary")
             return redirect("/")
 
         flash("Invalid credentials.", 'danger')
@@ -112,7 +112,7 @@ def logout():
     """logout of user."""
 
     do_logout()
-    flash(f"See you next time", "success")
+    flash(f"See you next time", "secondary")
     return redirect("/")
 
 
@@ -127,9 +127,9 @@ def delete_user():
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
+    flash(f"{g.user.username} has been deleted", "danger")
     do_logout()
 
-    flash(f"{g.user} has been deleted")
     db.session.delete(g.user)
     db.session.commit()
 
@@ -230,7 +230,7 @@ def lootbag_delete(lootbag_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    bag = Lootbag.query.get(lootbag_id)
+    bag = Lootbag.query.get_or_404(lootbag_id)
     db.session.delete(bag)
     db.session.commit()
 
@@ -245,7 +245,7 @@ def lootbag_delete(lootbag_id):
 def add_item(lootbag_id):
     """Add a new item to the database"""
 
-    lootbag = Lootbag.query.get(lootbag_id)
+    lootbag = Lootbag.query.get_or_404(lootbag_id)
     item_name = request.form.get('item_name')
     rarity = request.form.get('rarity')
     requires_attunement = request.form.get('requires_attunement')
@@ -321,13 +321,13 @@ def item_delete(item_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    item = Item.query.get(item_id)
+    item = Item.query.get_or_404(item_id)
     lootbag = item.lootbag[0]
 
     db.session.delete(item)
     db.session.commit()
 
-    return ('', 204)
+    return redirect(f'/lootbag/{lootbag.id}')
 
 
 @app.route('/')

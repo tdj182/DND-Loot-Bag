@@ -37,20 +37,23 @@ nav .container {
   padding-bottom: 0px;
 }
 
-
+.alert-secondary {
+  margin: 0px;
+}
 .display-4{
   color: red;
   background-color: rgba(0, 0, 0);
 }
 
-.container {
+body > .container {
   background-color: rgba(0, 0, 0, 0.5);
   text-align: center;
   color: white;
   padding: 0px 0px 20px 0px;
+  height: 100vh;
 }
 
-.card, .jumbotron {
+.card {
   background-color: rgba(0, 0, 0, 0.8);
   margin: 1rem;
   color: #fff;
@@ -58,6 +61,9 @@ nav .container {
 }
 
 .jumbotron {
+  background-color: rgba(0, 0, 0, 0.0);
+  margin: 1rem;
+  color: #fff;
   display: inline-block;
 }
 
@@ -113,6 +119,7 @@ form > button {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   padding: 10px 20px;
   background-color: var(--secondary-color);
   border: var(--primary-color) 1px solid;
@@ -121,6 +128,7 @@ form > button {
 
 .edit-delete {
   display: flex;
+  justify-content: center;
 }
 
 .edit-delete form {

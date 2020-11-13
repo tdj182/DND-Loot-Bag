@@ -1,5 +1,6 @@
 $( document ).ready(function() {
   const BASE_URL = "https://api.open5e.com/";
+  const MY_URL = "http://127.0.0.1:5000/";
   let selectGroup;
 
   async function processForm(evt) {
@@ -27,6 +28,20 @@ $( document ).ready(function() {
     }
   }
 
+  function addNewItem() {
+    selectedItem = $(this).siblings("[name=slug]")
+    for (const item in selectGroup) {
+      if (selectGroup[item].slug == selectedItem[0].defaultValue){
+        addItemHtml(selectGroup[item])
+      }
+    }
+  }
+
+  $('#create-item-form').on('submit', function() {
+    console.log( $( this ).serializeArray() );
+    addItemCreationHtml($( this ).serializeArray())
+  })
+
   $("#item-search-form").on("submit", processForm);
   $('#btn-convert').on("click", beginCurrencyAdjustment);
   
@@ -39,9 +54,9 @@ $( document ).ready(function() {
     }
   })
   
-  $('#item-list').on('click', '.fa-trash', function() {
-    $(this).parents("[class=card]").remove()
-  })
+  // $('#item-list').on('click', '.fa-trash',  function() {
+  //   $(this).parents("[class=card]").remove()
+  // })
 
   // set value to 0 on focus
   $('input[type=number]').on('focusin', function() {
