@@ -119,6 +119,13 @@ def logout():
 #################################################################
 # Users
 
+@app.route('/confirm-delete')
+def confirm_delete():
+    """Confirm that the user wants to actually wants to delete"""
+
+    return render_template('users/delete.html')
+
+
 @app.route('/delete', methods=["POST"])
 def delete_user():
     """Delete user."""
@@ -148,6 +155,8 @@ def lootbag_show(lootbag_id):
     if g.user.id == lootbag.owner_id or lootbag.password == session[EXTRA_LOOTBAG_PASSWORD] and lootbag.id == session[EXTRA_LOOTBAG_ID]:
         return render_template('lootbags/show.html', lootbag=lootbag, form=form)
     elif not lootbag.is_shareable:
+        import pdb
+        pdb.set_trace()
         flash("Access unauthorized.", "danger")
         return redirect("/")
 

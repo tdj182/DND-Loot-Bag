@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="display-4">Are You Sure You Want To Delete Your Profile? This Action Cannot Be Undone</div>
+      
+  <form method="POST" action="/delete" class="form-inline">
+    <div class="edit-btn-area">
+      <a href="/" class="btn btn-secondary">Cancel</a>
+      <button class="btn btn-danger ml-2">Delete Profile</button>
+    </div>
+  </form>
+{% endblock %}

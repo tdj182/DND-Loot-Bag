@@ -19,7 +19,7 @@ class UserForm(FlaskForm):
 class LootbagForm(FlaskForm):
     """Form for a new loot bag"""
     name = StringField('Name', validators=[Required()])
-    password = PasswordField('Password')
+    password = StringField('Password')
     is_shareable = BooleanField('Is Shareable?')
 
 

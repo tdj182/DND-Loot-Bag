@@ -40,7 +40,7 @@ nav .container {
 .alert-secondary {
   margin: 0px;
 }
-.display-4{
+.display-4 {
   color: red;
   background-color: rgba(0, 0, 0);
 }
@@ -50,7 +50,7 @@ body > .container {
   text-align: center;
   color: white;
   padding: 0px 0px 20px 0px;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .card {
