@@ -25,6 +25,8 @@ https://dnd-lootbag.herokuapp.com/
     1. Create New Items
     1. Search For New Items
     1. Edit/Delete Items
+1. You may share the URL to your lootbag
+1. If it is sharable, the user will be prompted to input the password you designated
 
 ## Requirements 
 > I believe I have installed some of these on my machine so maybe they are not all required?
