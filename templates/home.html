@@ -13,7 +13,13 @@
         <span class="text-danger">{{ error }}</span>
       {% endfor %}
       {{field.label}}
-      {{ field(placeholder=field.label.text, class="form-control") }}
+      {% if field.type == "BooleanField" %}
+        
+          {{ field(placeholder=field.label.text, class="form-check-input") }}
+          <div></div>
+      {% else %}
+        {{ field(placeholder=field.label.text, class="form-control") }}
+      {% endif %}
     {% endfor %}
 
     <button class="btn btn-primary btn-sm btn-block">Create!</button>
